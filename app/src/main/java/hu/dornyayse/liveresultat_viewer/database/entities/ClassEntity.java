@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "classes", foreignKeys = @ForeignKey(
+@Entity(tableName = "class", foreignKeys = @ForeignKey(
         entity = CompetitionEntity.class,
         parentColumns = "id",
         childColumns = "competition_id"

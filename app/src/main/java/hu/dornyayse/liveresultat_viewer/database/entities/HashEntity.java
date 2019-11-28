@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 
 import hu.dornyayse.liveresultat_viewer.model.Method;
 
-@Entity(tableName = "hashes", foreignKeys = @ForeignKey(
+@Entity(tableName = "hash", foreignKeys = @ForeignKey(
         entity = CompetitionEntity.class,
         parentColumns = "id",
         childColumns = "competition_id"

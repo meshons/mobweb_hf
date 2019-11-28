@@ -16,7 +16,7 @@ import hu.dornyayse.liveresultat_viewer.database.entities.CompetitionEntity;
 import hu.dornyayse.liveresultat_viewer.database.entities.HashEntity;
 import hu.dornyayse.liveresultat_viewer.database.entities.LastPassingEntity;
 import hu.dornyayse.liveresultat_viewer.database.entities.ResultEntity;
-import hu.dornyayse.liveresultat_viewer.database.entities.SplitControlsEntity;
+import hu.dornyayse.liveresultat_viewer.database.entities.SplitControlEntity;
 import hu.dornyayse.liveresultat_viewer.database.entities.SplitTimeEntity;
 
 @Database(
@@ -26,7 +26,7 @@ import hu.dornyayse.liveresultat_viewer.database.entities.SplitTimeEntity;
                 HashEntity.class,
                 LastPassingEntity.class,
                 ResultEntity.class,
-                SplitControlsEntity.class,
+                SplitControlEntity.class,
                 SplitTimeEntity.class
         },
         version = 1

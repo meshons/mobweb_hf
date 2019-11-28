@@ -5,12 +5,12 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "results", foreignKeys = @ForeignKey(
+@Entity(tableName = "split_control", foreignKeys = @ForeignKey(
         entity = ClassEntity.class,
         parentColumns = "id",
         childColumns = "class_id"
 ))
-public class SplitControlsEntity {
+public class SplitControlEntity {
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true)
     public Long id;

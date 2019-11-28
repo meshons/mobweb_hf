@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity(tableName = "competitions")
+@Entity(tableName = "competition")
 public class CompetitionEntity {
 
     @ColumnInfo(name = "id")

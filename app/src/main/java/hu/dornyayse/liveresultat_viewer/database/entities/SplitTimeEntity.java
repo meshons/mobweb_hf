@@ -7,12 +7,12 @@ import androidx.room.PrimaryKey;
 
 import hu.dornyayse.liveresultat_viewer.model.Status;
 
-@Entity(tableName = "split_times", foreignKeys = {@ForeignKey(
+@Entity(tableName = "split_time", foreignKeys = {@ForeignKey(
         entity = ResultEntity.class,
         parentColumns = "id",
         childColumns = "result_id"
 ),  @ForeignKey(
-        entity = SplitControlsEntity.class,
+        entity = SplitControlEntity.class,
         parentColumns = "id",
         childColumns = "code_id"
 )})

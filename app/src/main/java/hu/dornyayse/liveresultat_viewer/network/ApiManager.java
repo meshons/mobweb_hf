@@ -11,20 +11,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiManager {
     private static final String SERVICE_URL = "https://liveresultat.orientering.se";
 
-    private static ApiManager instance;
-
-    public static ApiManager getInstance() {
-        if (instance == null) {
-            instance = new ApiManager();
-        }
-        return instance;
-    }
-
-    private Retrofit retrofit;
     private Api api;
 
-    private ApiManager() {
-        retrofit = new Retrofit.Builder()
+    public ApiManager() {
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(SERVICE_URL)
                 .client(new OkHttpClient.Builder().build())
                 .addConverterFactory(GsonConverterFactory.create())

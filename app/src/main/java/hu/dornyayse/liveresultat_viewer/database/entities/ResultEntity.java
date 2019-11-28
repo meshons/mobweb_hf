@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 
 import hu.dornyayse.liveresultat_viewer.model.Status;
 
-@Entity(tableName = "results", foreignKeys = @ForeignKey(
+@Entity(tableName = "result", foreignKeys = @ForeignKey(
         entity = ClassEntity.class,
         parentColumns = "id",
         childColumns = "class_id"
