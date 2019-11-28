@@ -1,18 +1,18 @@
-package hu.dornyayse.liveresultat_viewer.data.entities;
+package hu.dornyayse.liveresultat_viewer.database.entities;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-import hu.dornyayse.liveresultat_viewer.data.model.Status;
+import hu.dornyayse.liveresultat_viewer.model.Status;
 
 @Entity(tableName = "results", foreignKeys = @ForeignKey(
-        entity = Class.class,
+        entity = ClassEntity.class,
         parentColumns = "id",
         childColumns = "class_id"
 ))
-public class Result {
+public class ResultEntity {
 
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true)
@@ -31,7 +31,7 @@ public class Result {
     public Integer place;
 
     @ColumnInfo(name = "progress")
-    public Integer progess;
+    public Integer progress;
 
     @ColumnInfo(name = "start")
     public Long start;

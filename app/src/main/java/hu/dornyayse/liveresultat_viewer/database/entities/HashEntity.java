@@ -1,16 +1,18 @@
-package hu.dornyayse.liveresultat_viewer.data.entities;
+package hu.dornyayse.liveresultat_viewer.database.entities;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "classes", foreignKeys = @ForeignKey(
-        entity = Competition.class,
+import hu.dornyayse.liveresultat_viewer.model.Method;
+
+@Entity(tableName = "hashes", foreignKeys = @ForeignKey(
+        entity = CompetitionEntity.class,
         parentColumns = "id",
         childColumns = "competition_id"
-))
-public class Class {
+))public class HashEntity {
+
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true)
     public Long id;
@@ -18,6 +20,9 @@ public class Class {
     @ColumnInfo(name = "competition_id")
     public Long competitionId;
 
-    @ColumnInfo(name = "class_name")
-    public String className;
+    @ColumnInfo(name = "method")
+    public Method method;
+
+    @ColumnInfo(name = "hash")
+    public String hash;
 }

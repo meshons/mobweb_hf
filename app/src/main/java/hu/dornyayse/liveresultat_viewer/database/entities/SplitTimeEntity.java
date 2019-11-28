@@ -1,22 +1,22 @@
-package hu.dornyayse.liveresultat_viewer.data.entities;
+package hu.dornyayse.liveresultat_viewer.database.entities;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-import hu.dornyayse.liveresultat_viewer.data.model.Status;
+import hu.dornyayse.liveresultat_viewer.model.Status;
 
 @Entity(tableName = "split_times", foreignKeys = {@ForeignKey(
-        entity = Result.class,
+        entity = ResultEntity.class,
         parentColumns = "id",
         childColumns = "result_id"
 ),  @ForeignKey(
-        entity = SplitControls.class,
+        entity = SplitControlsEntity.class,
         parentColumns = "id",
         childColumns = "code_id"
 )})
-public class SplitTime {
+public class SplitTimeEntity {
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true)
     public Long id;

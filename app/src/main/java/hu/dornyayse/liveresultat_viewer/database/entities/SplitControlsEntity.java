@@ -1,4 +1,4 @@
-package hu.dornyayse.liveresultat_viewer.data.entities;
+package hu.dornyayse.liveresultat_viewer.database.entities;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -6,11 +6,11 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "results", foreignKeys = @ForeignKey(
-        entity = Class.class,
+        entity = ClassEntity.class,
         parentColumns = "id",
         childColumns = "class_id"
 ))
-public class SplitControls {
+public class SplitControlsEntity {
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true)
     public Long id;
@@ -20,4 +20,7 @@ public class SplitControls {
 
     @ColumnInfo(name = "code")
     public Integer code;
+
+    @ColumnInfo(name = "name")
+    public String name;
 }
