@@ -1,10 +1,8 @@
 package hu.dornyayse.liveresultat_viewer.database.dao;
 
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import java.util.List;
 
@@ -18,10 +16,4 @@ public interface SplitTimeDao {
 
     @Insert
     Long insert(SplitTimeEntity splitTimeEntity);
-
-    @Update
-    void update(SplitTimeEntity splitTimeEntity);
-
-    @Delete
-    void delete(SplitTimeEntity splitTimeEntity);
 }

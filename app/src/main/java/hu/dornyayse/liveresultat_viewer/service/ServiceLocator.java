@@ -1,5 +1,7 @@
 package hu.dornyayse.liveresultat_viewer.service;
 
+import android.content.Context;
+
 import hu.dornyayse.liveresultat_viewer.database.LiveresultatDatabase;
 import hu.dornyayse.liveresultat_viewer.network.ApiManager;
 
@@ -9,6 +11,7 @@ public class ServiceLocator {
     private ApiManager apiManager;
     private DataHolder dataHolder;
     private LiveresultatDatabase liveresultatDatabase;
+    private Context applicationContext;
 
     private ServiceLocator() {}
 
@@ -31,5 +34,13 @@ public class ServiceLocator {
 
     public LiveresultatDatabase getLiveresultatDatabase() {
         return liveresultatDatabase;
+    }
+
+    public Context getApplicationContext() {
+        return applicationContext;
+    }
+
+    public void setApplicationContext(Context applicationContext) {
+        this.applicationContext = applicationContext;
     }
 }

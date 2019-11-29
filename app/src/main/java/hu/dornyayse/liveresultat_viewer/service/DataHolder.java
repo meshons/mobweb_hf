@@ -1,10 +1,13 @@
 package hu.dornyayse.liveresultat_viewer.service;
 
+import androidx.room.Room;
+
 import java.util.HashMap;
 import java.util.List;
 
 import hu.dornyayse.liveresultat_viewer.database.LiveresultatDatabase;
 import hu.dornyayse.liveresultat_viewer.database.entities.ClassEntity;
+import hu.dornyayse.liveresultat_viewer.database.entities.CompetitionEntity;
 import hu.dornyayse.liveresultat_viewer.database.entities.HashEntity;
 import hu.dornyayse.liveresultat_viewer.database.entities.LastPassingEntity;
 import hu.dornyayse.liveresultat_viewer.database.entities.ResultEntity;
@@ -26,6 +29,7 @@ public class DataHolder {
     private hu.dornyayse.liveresultat_viewer.service.network.DataMapper networkDataMapper;
 
     private HashMap<Long, Competition> competitions = new HashMap<>();
+    private HashMap<Long, Competition> competitionsByApiId = new HashMap<>();
     private HashMap<Long, Class> classes = new HashMap<>();
     private HashMap<Long, Hash> hashes = new HashMap<>();
     private HashMap<Long, Result> results = new HashMap<>();
@@ -34,11 +38,82 @@ public class DataHolder {
     private HashMap<Long, SplitTime> splitTimes = new HashMap<>();
 
     public DataHolder() {
-        competitions = databaseDataMapper.loadCompetitions();
+        connectToDatabase();
+        liveresultatDatabase.beginTransaction();
+        competitions = loadCompetitions();
+        liveresultatDatabase.endTransaction();
+        closeConnectionToDatabase();
     }
 
     public void save() {
+        connectToDatabase();
+        liveresultatDatabase.beginTransaction();
+        liveresultatDatabase.clearAllTables();
+        for (Competition competition : competitions.values())
+            competition.setId(
+                    liveresultatDatabase.competitionDao()
+                            .insert(databaseDataMapper.convert(competition))
+            );
+        for (Class classModel : classes.values())
+            classModel.setId(
+                    liveresultatDatabase.classDao()
+                            .insert(databaseDataMapper.convert(classModel))
+            );
+        for (Hash hash : hashes.values())
+            hash.setId(
+                    liveresultatDatabase.hashDao()
+                            .insert(databaseDataMapper.convert(hash))
+            );
+        for (Result result : results.values())
+            result.setId(
+                    liveresultatDatabase.resultDao()
+                            .insert(databaseDataMapper.convert(result))
+            );
+        for (LastPassing lastPassing : lastPassings.values())
+            lastPassing.setId(
+                    liveresultatDatabase.lastPassingDao()
+                            .insert(databaseDataMapper.convert(lastPassing))
+            );
+        for (SplitControl splitControl : splitControls.values())
+            splitControl.setId(
+                    liveresultatDatabase.splitControlsDao()
+                            .insert(databaseDataMapper.convert(splitControl))
+            );
+        for (SplitTime splitTime : splitTimes.values())
+            splitTime.setId(
+                    liveresultatDatabase.splitTimeDao()
+                            .insert(databaseDataMapper.convert(splitTime))
+            );
+        liveresultatDatabase.endTransaction();
+        closeConnectionToDatabase();
+    }
 
+    private void connectToDatabase() {
+        liveresultatDatabase = Room.databaseBuilder(
+                ServiceLocator.getInstance().getApplicationContext(),
+                LiveresultatDatabase.class,
+                "liveresultat"
+        ).build();
+    }
+
+    private void closeConnectionToDatabase() {
+        if (liveresultatDatabase != null && liveresultatDatabase.isOpen())
+            liveresultatDatabase.close();
+        liveresultatDatabase = null;
+    }
+
+    private HashMap<Long, Competition> loadCompetitions() {
+        HashMap<Long, Competition> competitions = new HashMap<>();
+        List<CompetitionEntity> competitionEntities = liveresultatDatabase
+                .competitionDao().findAll();
+
+        for (CompetitionEntity competitionEntity : competitionEntities) {
+            Competition competition = databaseDataMapper.convert(competitionEntity);
+            competitions.put(competition.getId(), competition);
+            competitionsByApiId.put(competition.getApiId(), competition);
+        }
+
+        return competitions;
     }
 
     public Competition getCompetition(Long id) {
@@ -149,5 +224,37 @@ public class DataHolder {
         }
         splitTimes.putAll(splitsOfResult);
         return splitsOfResult;
+    }
+
+    public HashMap<Long, Competition> getCompetitions() {
+        return competitions;
+    }
+
+    public HashMap<Long, Competition> getCompetitionsByApiId() {
+        return competitionsByApiId;
+    }
+
+    public HashMap<Long, Class> getClasses() {
+        return classes;
+    }
+
+    public HashMap<Long, Hash> getHashes() {
+        return hashes;
+    }
+
+    public HashMap<Long, Result> getResults() {
+        return results;
+    }
+
+    public HashMap<Long, LastPassing> getLastPassings() {
+        return lastPassings;
+    }
+
+    public HashMap<Long, SplitControl> getSplitControls() {
+        return splitControls;
+    }
+
+    public HashMap<Long, SplitTime> getSplitTimes() {
+        return splitTimes;
     }
 }

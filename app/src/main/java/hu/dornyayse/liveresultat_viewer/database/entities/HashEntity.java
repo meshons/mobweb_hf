@@ -3,6 +3,7 @@ package hu.dornyayse.liveresultat_viewer.database.entities;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import hu.dornyayse.liveresultat_viewer.model.Method;
@@ -11,7 +12,8 @@ import hu.dornyayse.liveresultat_viewer.model.Method;
         entity = CompetitionEntity.class,
         parentColumns = "id",
         childColumns = "competition_id"
-))public class HashEntity {
+), indices = {@Index("id"), @Index("competition_id")})
+public class HashEntity {
 
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true)

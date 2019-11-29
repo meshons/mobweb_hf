@@ -3,7 +3,6 @@ package hu.dornyayse.liveresultat_viewer.database.dao;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import java.util.List;
 
@@ -17,7 +16,4 @@ public interface HashDao {
 
     @Insert
     Long insert(HashEntity hashEntity);
-
-    @Update
-    void update(HashEntity hashEntity);
 }

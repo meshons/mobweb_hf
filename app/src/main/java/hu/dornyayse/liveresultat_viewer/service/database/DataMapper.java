@@ -1,8 +1,5 @@
 package hu.dornyayse.liveresultat_viewer.service.database;
 
-import java.util.HashMap;
-import java.util.List;
-
 import hu.dornyayse.liveresultat_viewer.database.LiveresultatDatabase;
 import hu.dornyayse.liveresultat_viewer.database.entities.ClassEntity;
 import hu.dornyayse.liveresultat_viewer.database.entities.CompetitionEntity;
@@ -28,19 +25,6 @@ public class DataMapper {
             .getLiveresultatDatabase();
 
     private DataHolder dataHolder = ServiceLocator.getInstance().getDataHolder();
-
-    public HashMap<Long, Competition> loadCompetitions() {
-        HashMap<Long, Competition> competitions = new HashMap<>();
-        List<CompetitionEntity> competitionEntities = liveresultatDatabase
-                .competitionDao().findAll();
-
-        for (CompetitionEntity competitionEntity : competitionEntities) {
-            Competition competition = convert(competitionEntity);
-            competitions.put(competition.getId(), competition);
-        }
-
-        return competitions;
-    }
 
     public ClassEntity convert(Class classModel) {
         ClassEntity classEntity = new ClassEntity();

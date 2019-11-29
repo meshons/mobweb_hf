@@ -3,6 +3,7 @@ package hu.dornyayse.liveresultat_viewer.database.entities;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import hu.dornyayse.liveresultat_viewer.model.Status;
@@ -15,7 +16,7 @@ import hu.dornyayse.liveresultat_viewer.model.Status;
         entity = SplitControlEntity.class,
         parentColumns = "id",
         childColumns = "code_id"
-)})
+)}, indices = {@Index("id"), @Index("result_id"), @Index("code_id")})
 public class SplitTimeEntity {
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true)
