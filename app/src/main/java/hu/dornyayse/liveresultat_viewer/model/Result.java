@@ -2,7 +2,7 @@ package hu.dornyayse.liveresultat_viewer.model;
 
 import java.util.HashMap;
 
-class Result {
+public class Result {
 
     private Long id;
 

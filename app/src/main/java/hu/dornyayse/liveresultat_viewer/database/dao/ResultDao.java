@@ -8,20 +8,23 @@ import androidx.room.Update;
 
 import java.util.List;
 
-import hu.dornyayse.liveresultat_viewer.database.entities.CompetitionEntity;
+import hu.dornyayse.liveresultat_viewer.database.entities.ResultEntity;
 
 @Dao
 public interface ResultDao {
 
-    @Query("SELECT * FROM result")
-    List<CompetitionEntity> findAll();
+    @Query("SELECT * FROM result WHERE class_id = :classId")
+    List<ResultEntity> findAllOfClass(Long classId);
+
+    @Query("SELECT * FROM class WHERE id = :id")
+    ResultEntity findById(Long id);
 
     @Insert
-    Long insert(CompetitionEntity competitionEntity);
+    Long insert(ResultEntity resultEntity);
 
     @Update
-    void update(CompetitionEntity competitionEntity);
+    void update(ResultEntity resultEntity);
 
     @Delete
-    void delete(CompetitionEntity competitionEntity);
+    void delete(ResultEntity resultEntity);
 }

@@ -13,8 +13,8 @@ import hu.dornyayse.liveresultat_viewer.database.entities.SplitTimeEntity;
 @Dao
 public interface SplitTimeDao {
 
-    @Query("SELECT * FROM split_time")
-    List<SplitTimeEntity> findAll();
+    @Query("SELECT * FROM split_time WHERE result_id = :resultId")
+    List<SplitTimeEntity> findAllOfResult(Long resultId);
 
     @Insert
     Long insert(SplitTimeEntity splitTimeEntity);

@@ -16,6 +16,9 @@ public interface CompetitionDao {
     @Query("SELECT * FROM competition")
     List<CompetitionEntity> findAll();
 
+    @Query("SELECT * FROM competition WHERE id = :id")
+    CompetitionEntity findById(Long id);
+
     @Insert
     Long insert(CompetitionEntity competitionEntity);
 

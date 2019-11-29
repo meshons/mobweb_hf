@@ -2,11 +2,18 @@ package hu.dornyayse.liveresultat_viewer.database.entities;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity(tableName = "competition")
+import hu.dornyayse.liveresultat_viewer.model.Competition;
+
+@Entity(tableName = "competition", foreignKeys = @ForeignKey(
+        entity = Competition.class,
+        parentColumns = "id",
+        childColumns = "multi_day_first_day"
+))
 public class CompetitionEntity {
 
     @ColumnInfo(name = "id")

@@ -13,8 +13,11 @@ import hu.dornyayse.liveresultat_viewer.database.entities.SplitControlEntity;
 @Dao
 public interface SplitControlsDao {
 
-    @Query("SELECT * FROM split_control")
-    List<SplitControlEntity> findAll();
+    @Query("SELECT * FROM split_control WHERE class_id = :classId")
+    List<SplitControlEntity> findAllOfClass(Long classId);
+
+    @Query("SELECT * FROM split_control WHERE id = :id")
+    SplitControlEntity findById(Long id);
 
     @Insert
     Long insert(SplitControlEntity splitControlEntity);

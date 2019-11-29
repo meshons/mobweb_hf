@@ -13,8 +13,8 @@ import hu.dornyayse.liveresultat_viewer.database.entities.LastPassingEntity;
 @Dao
 public interface LastPassingDao {
 
-    @Query("SELECT * FROM last_passing")
-    List<LastPassingEntity> findAll();
+    @Query("SELECT * FROM last_passing WHERE competition_id = :competitionId")
+    List<LastPassingEntity> findAllOfCompetition(Long competitionId);
 
     @Insert
     Long insert(LastPassingEntity lastPassingEntity);

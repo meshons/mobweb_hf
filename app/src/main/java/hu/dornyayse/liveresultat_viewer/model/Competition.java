@@ -7,6 +7,8 @@ public class Competition {
 
     private Long id;
 
+    private Long apiId;
+
     private String Name;
 
     private String Organizer;
@@ -17,9 +19,13 @@ public class Competition {
 
     private int multiDayStage;
 
-    private Competition multiDayFirstStage;
+    private Competition multiDayFirstDay;
 
     private HashMap<Long, Class> classes;
+
+    private HashMap<Long, Hash> hashes;
+
+    private HashMap<Long, LastPassing> lastPassings;
 
     public Long getId() {
         return id;
@@ -27,6 +33,14 @@ public class Competition {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getApiId() {
+        return apiId;
+    }
+
+    public void setApiId(Long apiId) {
+        this.apiId = apiId;
     }
 
     public String getName() {
@@ -69,12 +83,12 @@ public class Competition {
         this.multiDayStage = multiDayStage;
     }
 
-    public Competition getMultiDayFirstStage() {
-        return multiDayFirstStage;
+    public Competition getMultiDayFirstDay() {
+        return multiDayFirstDay;
     }
 
-    public void setMultiDayFirstStage(Competition multiDayFirstStage) {
-        this.multiDayFirstStage = multiDayFirstStage;
+    public void setMultiDayFirstDay(Competition multiDayFirstDay) {
+        this.multiDayFirstDay = multiDayFirstDay;
     }
 
     public HashMap<Long, Class> getClasses() {
@@ -83,5 +97,21 @@ public class Competition {
 
     public void setClasses(HashMap<Long, Class> classes) {
         this.classes = classes;
+    }
+
+    public HashMap<Long, Hash> getHashes() {
+        return hashes;
+    }
+
+    public void setHashes(HashMap<Long, Hash> hashes) {
+        this.hashes = hashes;
+    }
+
+    public HashMap<Long, LastPassing> getLastPassings() {
+        return lastPassings;
+    }
+
+    public void setLastPassings(HashMap<Long, LastPassing> lastPassings) {
+        this.lastPassings = lastPassings;
     }
 }

@@ -13,8 +13,11 @@ import hu.dornyayse.liveresultat_viewer.database.entities.ClassEntity;
 @Dao
 public interface ClassDao {
 
-    @Query("SELECT * FROM class")
-    List<ClassEntity> findAll();
+    @Query("SELECT * FROM class WHERE competition_id = :competitionId")
+    List<ClassEntity> findAllOfCompetition(Long competitionId);
+
+    @Query("SELECT * FROM result WHERE id = :id")
+    ClassEntity findById(Long id);
 
     @Insert
     Long insert(ClassEntity classEntity);

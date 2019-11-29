@@ -1,6 +1,6 @@
 package hu.dornyayse.liveresultat_viewer.model;
 
-class SplitTime {
+public class SplitTime {
 
     private Long id;
 

@@ -1,12 +1,14 @@
 package hu.dornyayse.liveresultat_viewer.model;
 
-class SplitControl {
+public class SplitControl {
 
     private Long id;
 
     private Class ownerClass;
 
     private Integer code;
+
+    private String name;
 
     public Long getId() {
         return id;
@@ -30,5 +32,13 @@ class SplitControl {
 
     public void setCode(Integer code) {
         this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
