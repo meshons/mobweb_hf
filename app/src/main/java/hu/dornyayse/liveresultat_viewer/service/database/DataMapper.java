@@ -1,6 +1,5 @@
 package hu.dornyayse.liveresultat_viewer.service.database;
 
-import hu.dornyayse.liveresultat_viewer.database.LiveresultatDatabase;
 import hu.dornyayse.liveresultat_viewer.database.entities.ClassEntity;
 import hu.dornyayse.liveresultat_viewer.database.entities.CompetitionEntity;
 import hu.dornyayse.liveresultat_viewer.database.entities.HashEntity;
@@ -16,15 +15,13 @@ import hu.dornyayse.liveresultat_viewer.model.Result;
 import hu.dornyayse.liveresultat_viewer.model.SplitControl;
 import hu.dornyayse.liveresultat_viewer.model.SplitTime;
 import hu.dornyayse.liveresultat_viewer.service.DataHolder;
-import hu.dornyayse.liveresultat_viewer.service.ServiceLocator;
 
 public class DataMapper {
+    private DataHolder dataHolder;
 
-    private LiveresultatDatabase liveresultatDatabase = ServiceLocator
-            .getInstance()
-            .getLiveresultatDatabase();
-
-    private DataHolder dataHolder = ServiceLocator.getInstance().getDataHolder();
+    public DataMapper(DataHolder _dataHolder) {
+        dataHolder = _dataHolder;
+    }
 
     public ClassEntity convert(Class classModel) {
         ClassEntity classEntity = new ClassEntity();
@@ -52,8 +49,6 @@ public class DataMapper {
         competitionEntity.organizer = competitionModel.getOrganizer();
         competitionEntity.date = competitionModel.getDate();
         competitionEntity.timeDiff = competitionModel.getTimeDiff();
-        competitionEntity.multiDayStage = competitionModel.getMultiDayStage();
-        competitionEntity.multiDayFirstDay = competitionModel.getMultiDayFirstDay().getId();
         return competitionEntity;
     }
 
@@ -65,10 +60,6 @@ public class DataMapper {
         competition.setOrganizer(competitionEntity.organizer);
         competition.setDate(competitionEntity.date);
         competition.setTimeDiff(competitionEntity.timeDiff);
-        competition.setMultiDayStage(competitionEntity.multiDayStage);
-        competition.setMultiDayFirstDay(
-                dataHolder.getCompetition(competitionEntity.multiDayFirstDay)
-        );
         competition.setClasses(dataHolder.getClassesOfCompetition(competitionEntity.id));
         competition.setHashes(dataHolder.getHashesOfCompetition(competitionEntity.id));
         competition.setLastPassings(dataHolder.getLastPassingsOfCompetition(competitionEntity.id));

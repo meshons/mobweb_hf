@@ -3,7 +3,7 @@ package hu.dornyayse.liveresultat_viewer.model;
 import java.util.Date;
 import java.util.HashMap;
 
-public class Competition {
+public class Competition implements Comparable<Competition> {
 
     private Long id;
 
@@ -16,10 +16,6 @@ public class Competition {
     private Date date;
 
     private int timeDiff;
-
-    private int multiDayStage;
-
-    private Competition multiDayFirstDay;
 
     private HashMap<Long, Class> classes;
 
@@ -75,22 +71,6 @@ public class Competition {
         this.timeDiff = timeDiff;
     }
 
-    public int getMultiDayStage() {
-        return multiDayStage;
-    }
-
-    public void setMultiDayStage(int multiDayStage) {
-        this.multiDayStage = multiDayStage;
-    }
-
-    public Competition getMultiDayFirstDay() {
-        return multiDayFirstDay;
-    }
-
-    public void setMultiDayFirstDay(Competition multiDayFirstDay) {
-        this.multiDayFirstDay = multiDayFirstDay;
-    }
-
     public HashMap<Long, Class> getClasses() {
         return classes;
     }
@@ -113,5 +93,10 @@ public class Competition {
 
     public void setLastPassings(HashMap<Long, LastPassing> lastPassings) {
         this.lastPassings = lastPassings;
+    }
+
+    @Override
+    public int compareTo(Competition o) {
+        return o.date.compareTo(date);
     }
 }

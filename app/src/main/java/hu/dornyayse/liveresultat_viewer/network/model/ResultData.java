@@ -2,7 +2,7 @@ package hu.dornyayse.liveresultat_viewer.network.model;
 
 import com.google.gson.JsonObject;
 
-class ResultData {
+public class ResultData {
 
     public String club;
 

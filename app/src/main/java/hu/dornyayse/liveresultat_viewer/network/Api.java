@@ -9,25 +9,25 @@ import retrofit2.http.Query;
 
 public interface Api {
 
-    @GET("api.php?Method=getcompetitions")
+    @GET("api.php?method=getcompetitions")
     Call<CompetitionsData> getCompetitions();
 
-    @GET("api.php?Method=getcompetitioninfo")
+    @GET("api.php?method=getcompetitioninfo")
     Call<CompetitionsData> getCompetitionInfo();
 
-    @GET("api.php?Method=getlastpassings")
+    @GET("api.php?method=getlastpassings")
     Call<LastPassingsData> getLastPassings(
             @Query("comp") Integer competitionId,
             @Query("last_hash") String lastHash
     );
 
-    @GET("api.php?Method=getclasses")
+    @GET("api.php?method=getclasses")
     Call<ClassesData> getClasses(
             @Query("comp") Integer competitionId,
             @Query("last_hash") String lastHash
     );
 
-    @GET("api.php?Method=getclassresults")
+    @GET("api.php?method=getclassresults")
     Call<ClassesData> getClassResults(
             @Query("comp") Integer competitionId,
             @Query("unformattedTimes") Boolean unformattedTimes,
@@ -35,7 +35,7 @@ public interface Api {
             @Query("last_hash") String lastHash
     );
 
-    @GET("api.php?Method=getclubresults")
+    @GET("api.php?method=getclubresults")
     Call<ClassesData> getClubResults(
             @Query("comp") Integer competitionId,
             @Query("unformattedTimes") Boolean unformattedTimes,

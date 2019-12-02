@@ -2,17 +2,12 @@ package hu.dornyayse.liveresultat_viewer.database.entities;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity(tableName = "competition", foreignKeys = @ForeignKey(
-        entity = CompetitionEntity.class,
-        parentColumns = "id",
-        childColumns = "multi_day_first_day"
-), indices = {@Index("id"), @Index("multi_day_first_day")})
+@Entity(tableName = "competition", indices = {@Index("id"), @Index("api_id")})
 public class CompetitionEntity {
 
     @ColumnInfo(name = "id")
@@ -33,10 +28,4 @@ public class CompetitionEntity {
 
     @ColumnInfo(name = "time_diff")
     public int timeDiff;
-
-    @ColumnInfo(name = "multi_day_stage")
-    public int multiDayStage;
-
-    @ColumnInfo(name = "multi_day_first_day")
-    public Long multiDayFirstDay;
 }

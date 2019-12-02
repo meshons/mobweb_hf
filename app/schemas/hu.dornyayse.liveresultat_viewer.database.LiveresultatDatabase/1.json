@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "9722022d0ffb9dd094e3d44d27b8112e",
+    "identityHash": "8f54b394076e657bc43e96c781c97dc4",
     "entities": [
       {
         "tableName": "class",
@@ -67,7 +67,7 @@
       },
       {
         "tableName": "competition",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `api_id` INTEGER, `name` TEXT, `organizer` TEXT, `date` INTEGER, `time_diff` INTEGER NOT NULL, `multi_day_stage` INTEGER NOT NULL, `multi_day_first_day` INTEGER, FOREIGN KEY(`multi_day_first_day`) REFERENCES `competition`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `api_id` INTEGER, `name` TEXT, `organizer` TEXT, `date` INTEGER, `time_diff` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -104,18 +104,6 @@
             "columnName": "time_diff",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "multiDayStage",
-            "columnName": "multi_day_stage",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "multiDayFirstDay",
-            "columnName": "multi_day_first_day",
-            "affinity": "INTEGER",
-            "notNull": false
           }
         ],
         "primaryKey": {
@@ -134,27 +122,15 @@
             "createSql": "CREATE  INDEX `index_competition_id` ON `${TABLE_NAME}` (`id`)"
           },
           {
-            "name": "index_competition_multi_day_first_day",
+            "name": "index_competition_api_id",
             "unique": false,
             "columnNames": [
-              "multi_day_first_day"
+              "api_id"
             ],
-            "createSql": "CREATE  INDEX `index_competition_multi_day_first_day` ON `${TABLE_NAME}` (`multi_day_first_day`)"
+            "createSql": "CREATE  INDEX `index_competition_api_id` ON `${TABLE_NAME}` (`api_id`)"
           }
         ],
-        "foreignKeys": [
-          {
-            "table": "competition",
-            "onDelete": "NO ACTION",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "multi_day_first_day"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
-          }
-        ]
+        "foreignKeys": []
       },
       {
         "tableName": "hash",
@@ -585,7 +561,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"9722022d0ffb9dd094e3d44d27b8112e\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"8f54b394076e657bc43e96c781c97dc4\")"
     ]
   }
 }
