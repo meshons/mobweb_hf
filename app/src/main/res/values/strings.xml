@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Liveresultat Viewer</string>
+    <string name="title_activity_competition_details">CompetitionDetailsActivity</string>
+    <string name="title_activity_asas">asas</string>
+    <string name="title_activity_result_list">ResultListActivity</string>
 </resources>

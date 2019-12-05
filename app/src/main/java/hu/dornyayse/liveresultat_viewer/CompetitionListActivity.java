@@ -6,6 +6,7 @@ import android.text.format.DateUtils;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,22 +33,24 @@ public class CompetitionListActivity extends AppCompatActivity {
 
     private HashMap<Long, Competition> competitions;
 
-    private RecyclerView competitionListView;
     private CompetitionAdapter competitionAdapter;
-
-    private RecyclerView todayCompetitionListView;
     private CompetitionAdapter todayCompetitionAdapter;
+
+    private String search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_competition_list);
 
-        competitionListView = findViewById(R.id.competition_list);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        RecyclerView competitionListView = findViewById(R.id.competition_list);
         competitionAdapter = new CompetitionAdapter();
         competitionListView.setLayoutManager(new LinearLayoutManager(this));
         competitionListView.setAdapter(competitionAdapter);
-        todayCompetitionListView = findViewById(R.id.today_competition_list);
+        RecyclerView todayCompetitionListView = findViewById(R.id.today_competition_list);
         todayCompetitionAdapter = new CompetitionAdapter();
         todayCompetitionListView.setLayoutManager(new LinearLayoutManager(this));
         todayCompetitionListView.setAdapter(todayCompetitionAdapter);

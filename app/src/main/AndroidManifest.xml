@@ -11,7 +11,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CompetitionListActivity">
+        <activity
+            android:name=".ResultListActivity"
+            android:label="@string/title_activity_result_list"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".CompetitionDetailsActivity"
+            android:label="@string/title_activity_competition_details"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CompetitionListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

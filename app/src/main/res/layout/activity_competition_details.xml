@@ -21,6 +21,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_competition_list" />
+    <include layout="@layout/content_competition_details" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
