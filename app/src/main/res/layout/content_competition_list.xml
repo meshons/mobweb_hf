@@ -9,38 +9,30 @@
     tools:context=".CompetitionDetailsActivity"
     tools:showIn="@layout/activity_competition_details">
 
-    <LinearLayout
+    <hu.dornyayse.liveresultat_viewer.view.SwipeRefreshLayoutCustom
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".CompetitionListActivity"
-        android:id="@+id/linear_layout">
+        android:layout_height="match_parent">
 
+            <LinearLayout
+                android:id="@+id/linear_layout"
+                android:focusableInTouchMode="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/today_competition_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/today_competition_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/competition_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/competition_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-    </LinearLayout>
+            </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/spinner"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/linear_layout"
-        android:layout_alignLeft="@+id/linear_layout"
-        android:layout_alignEnd="@+id/linear_layout"
-        android:layout_alignRight="@+id/linear_layout"
-        android:layout_alignParentBottom="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    </hu.dornyayse.liveresultat_viewer.view.SwipeRefreshLayoutCustom>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

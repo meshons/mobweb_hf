@@ -3,8 +3,6 @@ package hu.dornyayse.liveresultat_viewer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
-import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,6 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -47,7 +46,7 @@ public class CompetitionListActivity extends AppCompatActivity {
     private Date searchDate;
 
     private CoordinatorLayout coordinatorLayout;
-    private ProgressBar spinner;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +58,7 @@ public class CompetitionListActivity extends AppCompatActivity {
         toolbar.setTitle("Liveresultat viewer");
 
         coordinatorLayout = findViewById(R.id.coordinator_layout);
-        spinner = findViewById(R.id.spinner);
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
 
         RecyclerView competitionListView = findViewById(R.id.competition_list);
         competitionAdapter = new CompetitionAdapter();
@@ -84,8 +83,17 @@ public class CompetitionListActivity extends AppCompatActivity {
             Collections.sort(todayCompetitions);
             todayCompetitionAdapter.update(todayCompetitions);
         }
-        spinner.setVisibility(View.VISIBLE);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh()
+            {
+                loadFromApi();
+            }
+        });
+        swipeRefreshLayout.setRefreshing(true);
         loadFromApi();
+
     }
 
     public void mergeData(
@@ -124,7 +132,7 @@ public class CompetitionListActivity extends AppCompatActivity {
             CompetitionListActivity activity = activityReference.get();
             if (activity == null || activity.isFinishing()) return;
 
-            activity.spinner.setVisibility(View.GONE);
+            activity.swipeRefreshLayout.setRefreshing(false);
 
             List<Competition> orderedCompetition = new ArrayList<>(activity.competitions.values());
             Collections.sort(orderedCompetition);
@@ -179,7 +187,7 @@ public class CompetitionListActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),
                                 "Failed to fetch data from the API",
                                 Toast.LENGTH_SHORT).show();
-                        spinner.setVisibility(View.GONE);
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 }
         );
