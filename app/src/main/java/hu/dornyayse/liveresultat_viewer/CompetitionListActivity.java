@@ -3,6 +3,7 @@ package hu.dornyayse.liveresultat_viewer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,7 +38,8 @@ public class CompetitionListActivity extends AppCompatActivity {
     private CompetitionAdapter competitionAdapter;
     private CompetitionAdapter todayCompetitionAdapter;
 
-    private String search;
+    private String searchName;
+    private Date searchDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class CompetitionListActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle("Liveresultat viewer");
 
         RecyclerView competitionListView = findViewById(R.id.competition_list);
         competitionAdapter = new CompetitionAdapter();
@@ -98,6 +102,9 @@ public class CompetitionListActivity extends AppCompatActivity {
             }
             Collections.sort(todayCompetitions);
             activity.todayCompetitionAdapter.update(todayCompetitions);
+            Toast.makeText(activity,
+                    "Data loaded from offline database",
+                    Toast.LENGTH_SHORT).show();
             activity.loadFromApi();
         }
     }
@@ -142,6 +149,9 @@ public class CompetitionListActivity extends AppCompatActivity {
             }
             Collections.sort(todayCompetitions);
             activity.todayCompetitionAdapter.update(todayCompetitions);
+            Toast.makeText(activity,
+                    "Data loaded from online database",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
