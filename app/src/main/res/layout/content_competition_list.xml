@@ -14,24 +14,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-            <LinearLayout
-                android:id="@+id/linear_layout"
-                android:focusableInTouchMode="true"
+        <LinearLayout
+            android:id="@+id/linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:isScrollContainer="true"
+            android:orientation="vertical"
+            android:scrollbars="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/competition_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:isScrollContainer="true"
+                android:overScrollMode="never" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/today_competition_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/competition_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
+        </LinearLayout>
 
     </hu.dornyayse.liveresultat_viewer.view.SwipeRefreshLayoutCustom>
 

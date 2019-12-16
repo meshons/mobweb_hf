@@ -3,6 +3,7 @@ package hu.dornyayse.liveresultat_viewer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -40,13 +41,14 @@ public class CompetitionListActivity extends AppCompatActivity {
     private HashMap<Long, Competition> competitions;
 
     private CompetitionAdapter competitionAdapter;
-    private CompetitionAdapter todayCompetitionAdapter;
 
     private String searchName;
     private Date searchDate;
 
     private CoordinatorLayout coordinatorLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
+
+    private boolean updatingDatabase = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +57,7 @@ public class CompetitionListActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Liveresultat viewer");
+        toolbar.setTitle(getString(R.string.app_name));
 
         coordinatorLayout = findViewById(R.id.coordinator_layout);
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
@@ -64,10 +66,6 @@ public class CompetitionListActivity extends AppCompatActivity {
         competitionAdapter = new CompetitionAdapter();
         competitionListView.setLayoutManager(new LinearLayoutManager(this));
         competitionListView.setAdapter(competitionAdapter);
-        RecyclerView todayCompetitionListView = findViewById(R.id.today_competition_list);
-        todayCompetitionAdapter = new CompetitionAdapter();
-        todayCompetitionListView.setLayoutManager(new LinearLayoutManager(this));
-        todayCompetitionListView.setAdapter(todayCompetitionAdapter);
 
         competitions = dataHolder.getCompetitions();
 
@@ -81,7 +79,7 @@ public class CompetitionListActivity extends AppCompatActivity {
                     todayCompetitions.add(competition);
             }
             Collections.sort(todayCompetitions);
-            todayCompetitionAdapter.update(todayCompetitions);
+            competitionAdapter.updateToday(todayCompetitions);
         }
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
         {
@@ -91,7 +89,6 @@ public class CompetitionListActivity extends AppCompatActivity {
                 loadFromApi();
             }
         });
-        swipeRefreshLayout.setRefreshing(true);
         loadFromApi();
 
     }
@@ -115,6 +112,8 @@ public class CompetitionListActivity extends AppCompatActivity {
         protected HashMap<Long, Competition> doInBackground(MergeDataObject... mergeDataObjects) {
             CompetitionListActivity activity = activityReference.get();
             if (activity == null || activity.isFinishing()) return null;
+
+            activity.updatingDatabase = true;
 
             MergeDataObject mergeDataObject = mergeDataObjects[0];
 
@@ -142,8 +141,10 @@ public class CompetitionListActivity extends AppCompatActivity {
                 if (DateUtils.isToday(competition.getDate().getTime()))
                     todayCompetitions.add(competition);
             }
+            int i = 0;
             Collections.sort(todayCompetitions);
-            activity.todayCompetitionAdapter.update(todayCompetitions);
+            activity.competitionAdapter.updateToday(todayCompetitions);
+            activity.updatingDatabase = false;
             Snackbar.make(
                     activity.coordinatorLayout,
                     R.string.data_loaded_from_API,
@@ -153,6 +154,14 @@ public class CompetitionListActivity extends AppCompatActivity {
     }
 
     private void loadFromApi() {
+        if (updatingDatabase)
+            return;
+        swipeRefreshLayout.setRefreshing(true);
+        Snackbar.make(
+                coordinatorLayout,
+                R.string.data_started_loading_from_API,
+                Snackbar.LENGTH_SHORT
+        ).show();
         apiManager.getCompetitions().enqueue(
                 new Callback<CompetitionsData>() {
                     @Override
@@ -183,11 +192,21 @@ public class CompetitionListActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<CompetitionsData> call, Throwable t) {
-                        Toast.makeText(getApplicationContext(),
-                                "Failed to fetch data from the API",
-                                Toast.LENGTH_SHORT).show();
+                    public void onFailure(
+                            @NonNull Call<CompetitionsData> call,
+                            @NonNull Throwable t
+                    ) {
                         swipeRefreshLayout.setRefreshing(false);
+                        Snackbar.make(
+                                coordinatorLayout,
+                                R.string.data_load_failed_from_API,
+                                Snackbar.LENGTH_INDEFINITE
+                        ).setAction(R.string.retry, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                loadFromApi();
+                            }
+                        }).show();
                     }
                 }
         );

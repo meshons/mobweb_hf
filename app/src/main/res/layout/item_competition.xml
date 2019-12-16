@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,17 +14,18 @@
         <TextView
             android:id="@+id/item_competition_date"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             tools:text="Date" />
 
         <TextView
             android:id="@+id/item_competition_club"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            tools:text="Club"
-            android:layout_gravity="end"/>
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            tools:text="Club" />
 
     </LinearLayout>
 
@@ -32,6 +33,13 @@
         android:id="@+id/item_competition_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
         tools:text="Race name" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorPrimary"/>
 
 </LinearLayout>

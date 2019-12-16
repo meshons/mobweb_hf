@@ -342,6 +342,7 @@ public class DataHolder {
                     )
             );
             competitions.put(competition.getId(), competition);
+            competitionsByApiId.put(competition.getApiId(), competition);
         }
     }
 
