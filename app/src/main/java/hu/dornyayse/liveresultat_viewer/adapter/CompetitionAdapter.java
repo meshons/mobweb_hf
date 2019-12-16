@@ -62,6 +62,7 @@ public class CompetitionAdapter
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(v.getContext(), CompetitionDetailsActivity.class);
+                i.putExtra("competition", competition.getId());
                 v.getContext().startActivity(i);
             }
         });

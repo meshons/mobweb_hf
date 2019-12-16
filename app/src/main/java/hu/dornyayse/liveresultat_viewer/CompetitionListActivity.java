@@ -1,8 +1,10 @@
 package hu.dornyayse.liveresultat_viewer;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.lang.ref.WeakReference;
@@ -24,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import hu.dornyayse.liveresultat_viewer.adapter.CompetitionAdapter;
+import hu.dornyayse.liveresultat_viewer.fragment.SearchCompetitionDialogFragment;
 import hu.dornyayse.liveresultat_viewer.model.Competition;
 import hu.dornyayse.liveresultat_viewer.network.ApiManager;
 import hu.dornyayse.liveresultat_viewer.network.model.CompetitionsData;
@@ -33,7 +37,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CompetitionListActivity extends AppCompatActivity {
+public class CompetitionListActivity extends AppCompatActivity implements
+        SearchCompetitionDialogFragment.SearchCompetitionDialogListener {
 
     private DataHolder dataHolder = ServiceLocator.getInstance().getDataHolder();
     private ApiManager apiManager = ServiceLocator.getInstance().getApiManager();
@@ -41,9 +46,6 @@ public class CompetitionListActivity extends AppCompatActivity {
     private HashMap<Long, Competition> competitions;
 
     private CompetitionAdapter competitionAdapter;
-
-    private String searchName;
-    private Date searchDate;
 
     private CoordinatorLayout coordinatorLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -56,8 +58,37 @@ public class CompetitionListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_competition_list);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         toolbar.setTitle(getString(R.string.app_name));
+        toolbar.inflateMenu(R.menu.main);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+
+                if (id == R.id.settings) {
+                    Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
+                    startActivity(i);
+                    return true;
+                } else if (id == R.id.refresh) {
+                    loadFromApi();
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new SearchCompetitionDialogFragment()
+                        .show(
+                                getSupportFragmentManager(),
+                                SearchCompetitionDialogFragment.TAG
+                        );
+            }
+        });
 
         coordinatorLayout = findViewById(R.id.coordinator_layout);
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
@@ -81,11 +112,9 @@ public class CompetitionListActivity extends AppCompatActivity {
             Collections.sort(todayCompetitions);
             competitionAdapter.updateToday(todayCompetitions);
         }
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
-        {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh()
-            {
+            public void onRefresh() {
                 loadFromApi();
             }
         });
@@ -97,6 +126,11 @@ public class CompetitionListActivity extends AppCompatActivity {
             MergeDataObject mergeDataObject
     ) {
         new MergeData(this).execute(mergeDataObject);
+    }
+
+    @Override
+    public void onShoppingItemCreated(SearchCompetitionDialogFragment.CompetitionSearch search) {
+
     }
 
     private static class MergeData
@@ -212,7 +246,7 @@ public class CompetitionListActivity extends AppCompatActivity {
         );
     }
 
-    private class MergeDataObject{
+    private class MergeDataObject {
         private List<Competition> insertedCompetitions;
         private HashMap<Long, Competition> updatedCompetitions;
         private HashMap<Long, Competition> deletedCompetitions;

@@ -5,6 +5,7 @@ import android.util.Log;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import hu.dornyayse.liveresultat_viewer.model.Competition;
 import hu.dornyayse.liveresultat_viewer.network.model.CompetitionData;
@@ -13,7 +14,7 @@ import hu.dornyayse.liveresultat_viewer.service.DataHolder;
 public class DataMapper {
 
     private DataHolder dataHolder;
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     public DataMapper(DataHolder _dataHolder) {
         dataHolder = _dataHolder;

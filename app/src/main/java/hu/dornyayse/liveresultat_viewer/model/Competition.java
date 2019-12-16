@@ -1,5 +1,6 @@
 package hu.dornyayse.liveresultat_viewer.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 
