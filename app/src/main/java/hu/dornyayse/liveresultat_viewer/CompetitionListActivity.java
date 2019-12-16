@@ -3,13 +3,18 @@ package hu.dornyayse.liveresultat_viewer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -41,6 +46,9 @@ public class CompetitionListActivity extends AppCompatActivity {
     private String searchName;
     private Date searchDate;
 
+    private CoordinatorLayout coordinatorLayout;
+    private ProgressBar spinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +57,9 @@ public class CompetitionListActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Liveresultat viewer");
+
+        coordinatorLayout = findViewById(R.id.coordinator_layout);
+        spinner = findViewById(R.id.spinner);
 
         RecyclerView competitionListView = findViewById(R.id.competition_list);
         competitionAdapter = new CompetitionAdapter();
@@ -59,54 +70,28 @@ public class CompetitionListActivity extends AppCompatActivity {
         todayCompetitionListView.setLayoutManager(new LinearLayoutManager(this));
         todayCompetitionListView.setAdapter(todayCompetitionAdapter);
 
-        new LoadData(this).execute();
+        competitions = dataHolder.getCompetitions();
+
+        if (competitions != null) {
+            List<Competition> orderedCompetition = new ArrayList<>(competitions.values());
+            Collections.sort(orderedCompetition);
+            competitionAdapter.update(orderedCompetition);
+            List<Competition> todayCompetitions = new ArrayList<>();
+            for (Competition competition : competitions.values()) {
+                if (DateUtils.isToday(competition.getDate().getTime()))
+                    todayCompetitions.add(competition);
+            }
+            Collections.sort(todayCompetitions);
+            todayCompetitionAdapter.update(todayCompetitions);
+        }
+        spinner.setVisibility(View.VISIBLE);
+        loadFromApi();
     }
 
     public void mergeData(
             MergeDataObject mergeDataObject
     ) {
         new MergeData(this).execute(mergeDataObject);
-    }
-
-    private static class LoadData extends AsyncTask<Void, Void, HashMap<Long, Competition>> {
-
-        private WeakReference<CompetitionListActivity> activityReference;
-
-        LoadData(CompetitionListActivity activity) {
-            this.activityReference = new WeakReference<CompetitionListActivity>(activity);
-        }
-
-        @Override
-        protected HashMap<Long, Competition> doInBackground(Void... voids) {
-            CompetitionListActivity activity = activityReference.get();
-            if (activity == null || activity.isFinishing()) return null;
-
-            activity.dataHolder.load(activity.getApplicationContext());
-            return activity.dataHolder.getCompetitions();
-        }
-
-        @Override
-        protected void onPostExecute(HashMap<Long, Competition> loadedCompetitions) {
-            CompetitionListActivity activity = activityReference.get();
-            if (activity == null || activity.isFinishing()) return;
-
-            activity.competitions = loadedCompetitions;
-
-            List<Competition> orderedCompetition = new ArrayList<>(activity.competitions.values());
-            Collections.sort(orderedCompetition);
-            activity.competitionAdapter.update(orderedCompetition);
-            List<Competition> todayCompetitions = new ArrayList<>();
-            for (Competition competition : activity.competitions.values()) {
-                if (DateUtils.isToday(competition.getDate().getTime()))
-                    todayCompetitions.add(competition);
-            }
-            Collections.sort(todayCompetitions);
-            activity.todayCompetitionAdapter.update(todayCompetitions);
-            Toast.makeText(activity,
-                    "Data loaded from offline database",
-                    Toast.LENGTH_SHORT).show();
-            activity.loadFromApi();
-        }
     }
 
     private static class MergeData
@@ -139,6 +124,8 @@ public class CompetitionListActivity extends AppCompatActivity {
             CompetitionListActivity activity = activityReference.get();
             if (activity == null || activity.isFinishing()) return;
 
+            activity.spinner.setVisibility(View.GONE);
+
             List<Competition> orderedCompetition = new ArrayList<>(activity.competitions.values());
             Collections.sort(orderedCompetition);
             activity.competitionAdapter.update(orderedCompetition);
@@ -149,9 +136,11 @@ public class CompetitionListActivity extends AppCompatActivity {
             }
             Collections.sort(todayCompetitions);
             activity.todayCompetitionAdapter.update(todayCompetitions);
-            Toast.makeText(activity,
-                    "Data loaded from online database",
-                    Toast.LENGTH_SHORT).show();
+            Snackbar.make(
+                    activity.coordinatorLayout,
+                    R.string.data_loaded_from_API,
+                    Snackbar.LENGTH_SHORT
+            ).show();
         }
     }
 
@@ -187,7 +176,10 @@ public class CompetitionListActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<CompetitionsData> call, Throwable t) {
-
+                        Toast.makeText(getApplicationContext(),
+                                "Failed to fetch data from the API",
+                                Toast.LENGTH_SHORT).show();
+                        spinner.setVisibility(View.GONE);
                     }
                 }
         );

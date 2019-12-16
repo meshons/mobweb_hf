@@ -13,6 +13,9 @@ import hu.dornyayse.liveresultat_viewer.database.entities.CompetitionEntity;
 @Dao
 public interface CompetitionDao {
 
+    @Query("SELECT COUNT(id) FROM competition")
+    int getCount();
+
     @Query("SELECT * FROM competition")
     List<CompetitionEntity> findAll();
 

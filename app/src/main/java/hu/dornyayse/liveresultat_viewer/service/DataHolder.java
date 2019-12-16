@@ -8,6 +8,7 @@ import androidx.room.Room;
 import java.util.HashMap;
 import java.util.List;
 
+import hu.dornyayse.liveresultat_viewer.SplashActivity;
 import hu.dornyayse.liveresultat_viewer.database.LiveresultatDatabase;
 import hu.dornyayse.liveresultat_viewer.database.entities.ClassEntity;
 import hu.dornyayse.liveresultat_viewer.database.entities.CompetitionEntity;
@@ -47,10 +48,12 @@ public class DataHolder {
 
     private boolean loaded = false;
 
-    public void load(Context context) {
+    public void load(Context context, SplashActivity.BackgroundLoaderCount blc) {
         if (!loaded) {
             connectToDatabase(context);
-            competitions = loadCompetitions();
+            blc.setNumberOfCompetitions(liveresultatDatabase.competitionDao().getCount());
+            blc.setCurrentProgress(0);
+            competitions = loadCompetitions(blc);
             closeConnectionToDatabase();
             loaded = true;
         }
@@ -112,7 +115,7 @@ public class DataHolder {
         liveresultatDatabase = null;
     }
 
-    private HashMap<Long, Competition> loadCompetitions() {
+    private HashMap<Long, Competition> loadCompetitions(SplashActivity.BackgroundLoaderCount blc) {
         List<CompetitionEntity> competitionEntities = liveresultatDatabase
                 .competitionDao().findAll();
 
@@ -120,6 +123,7 @@ public class DataHolder {
             Competition competition = databaseDataMapper.convert(competitionEntity);
             competitions.put(competition.getId(), competition);
             competitionsByApiId.put(competition.getApiId(), competition);
+            blc.increaseProgress();
         }
 
         return competitions;

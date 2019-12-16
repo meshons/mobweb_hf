@@ -19,4 +19,7 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="logo">logo</string>
+    <string name="loading">Loading data from offline database:\n%1$d / %2$d competitions loaded</string>
+    <string name="data_loaded_from_API">Data succesfully loaded from web server</string>
 </resources>
