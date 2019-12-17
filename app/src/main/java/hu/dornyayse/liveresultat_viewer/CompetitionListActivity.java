@@ -1,6 +1,7 @@
 package hu.dornyayse.liveresultat_viewer;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -21,10 +23,12 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Predicate;
 
 import hu.dornyayse.liveresultat_viewer.adapter.CompetitionAdapter;
 import hu.dornyayse.liveresultat_viewer.fragment.SearchCompetitionDialogFragment;
@@ -49,12 +53,26 @@ public class CompetitionListActivity extends AppCompatActivity implements
 
     private CoordinatorLayout coordinatorLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private FloatingActionButton fab;
+
+    SearchCompetitionDialogFragment.CompetitionSearch search = null;
 
     private boolean updatingDatabase = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences pref = PreferenceManager
+                .getDefaultSharedPreferences(this);
+
+        boolean darkMode = pref.getBoolean("dark_mode", false);
+        if (darkMode) {
+            setTheme(R.style.DarkTheme);
+        } else {
+            setTheme(R.style.LightTheme);
+        }
+
         setContentView(R.layout.activity_competition_list);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -78,7 +96,7 @@ public class CompetitionListActivity extends AppCompatActivity implements
             }
         });
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,16 +119,7 @@ public class CompetitionListActivity extends AppCompatActivity implements
         competitions = dataHolder.getCompetitions();
 
         if (competitions != null) {
-            List<Competition> orderedCompetition = new ArrayList<>(competitions.values());
-            Collections.sort(orderedCompetition);
-            competitionAdapter.update(orderedCompetition);
-            List<Competition> todayCompetitions = new ArrayList<>();
-            for (Competition competition : competitions.values()) {
-                if (DateUtils.isToday(competition.getDate().getTime()))
-                    todayCompetitions.add(competition);
-            }
-            Collections.sort(todayCompetitions);
-            competitionAdapter.updateToday(todayCompetitions);
+            orderAndUpdate();
         }
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -128,9 +137,65 @@ public class CompetitionListActivity extends AppCompatActivity implements
         new MergeData(this).execute(mergeDataObject);
     }
 
-    @Override
-    public void onShoppingItemCreated(SearchCompetitionDialogFragment.CompetitionSearch search) {
+    private void orderAndUpdate() {
+        List<Competition> orderedCompetition = new ArrayList<>();
+        if (search != null) {
+            for (Competition competition : competitions.values()) {
+                if (search.isSearchDate()) {
+                    Calendar cal1 = Calendar.getInstance();
+                    Calendar cal2 = Calendar.getInstance();
+                    cal1.setTime(search.getDate());
+                    cal2.setTime(competition.getDate());
+                    boolean sameDay = cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR) &&
+                            cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
+                    if (sameDay)
+                        orderedCompetition.add(competition);
+                } else if (competition.getName().toLowerCase()
+                        .contains(search.getName().toLowerCase()))
+                    orderedCompetition.add(competition);
+            }
+        } else {
+            orderedCompetition = new ArrayList<>(competitions.values());
+        }
+        Collections.sort(orderedCompetition);
+        competitionAdapter.update(orderedCompetition);
+        List<Competition> todayCompetitions = new ArrayList<>();
+        for (Competition competition : orderedCompetition) {
+            if (DateUtils.isToday(competition.getDate().getTime()))
+                todayCompetitions.add(competition);
+        }
+        Collections.sort(todayCompetitions);
+        competitionAdapter.updateToday(todayCompetitions);
+    }
 
+    @Override
+    public void onSearch(SearchCompetitionDialogFragment.CompetitionSearch search) {
+        this.search = search;
+        orderAndUpdate();
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetAfterSearch();
+            }
+        });
+        fab.setImageResource(R.drawable.close);
+    }
+
+    public void resetAfterSearch() {
+        search = null;
+        orderAndUpdate();
+
+        fab.setImageResource(R.drawable.search_dark);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new SearchCompetitionDialogFragment()
+                        .show(
+                                getSupportFragmentManager(),
+                                SearchCompetitionDialogFragment.TAG
+                        );
+            }
+        });
     }
 
     private static class MergeData
@@ -167,17 +232,7 @@ public class CompetitionListActivity extends AppCompatActivity implements
 
             activity.swipeRefreshLayout.setRefreshing(false);
 
-            List<Competition> orderedCompetition = new ArrayList<>(activity.competitions.values());
-            Collections.sort(orderedCompetition);
-            activity.competitionAdapter.update(orderedCompetition);
-            List<Competition> todayCompetitions = new ArrayList<>();
-            for (Competition competition : activity.competitions.values()) {
-                if (DateUtils.isToday(competition.getDate().getTime()))
-                    todayCompetitions.add(competition);
-            }
-            int i = 0;
-            Collections.sort(todayCompetitions);
-            activity.competitionAdapter.updateToday(todayCompetitions);
+            activity.orderAndUpdate();
             activity.updatingDatabase = false;
             Snackbar.make(
                     activity.coordinatorLayout,

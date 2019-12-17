@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -30,7 +29,7 @@ public class SearchCompetitionDialogFragment extends DialogFragment {
     public static final String TAG = "SearchCompetitionDialogFragment";
 
     public interface SearchCompetitionDialogListener {
-        void onShoppingItemCreated(CompetitionSearch search);
+        void onSearch(CompetitionSearch search);
     }
 
     private SearchCompetitionDialogListener listener;
@@ -39,7 +38,7 @@ public class SearchCompetitionDialogFragment extends DialogFragment {
     private EditText date;
     private Switch searchSwitch;
 
-    final Calendar myCalendar = Calendar.getInstance();
+    private final Calendar myCalendar = Calendar.getInstance();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,7 +61,13 @@ public class SearchCompetitionDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.search, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // TODO implement item creation
+                        listener.onSearch(
+                                new CompetitionSearch(
+                                        searchSwitch.isChecked(),
+                                        myCalendar.getTime(),
+                                        name.getText().toString()
+                                )
+                        );
                     }
                 })
                 .setNegativeButton(R.string.cancel, null)
@@ -124,13 +129,26 @@ public class SearchCompetitionDialogFragment extends DialogFragment {
     }
 
     public static class CompetitionSearch {
-        SearchEnum searchEnum;
+        boolean searchDate;
         Date date;
         String name;
 
-        private enum SearchEnum {
-            name,
-            date
+        public boolean isSearchDate() {
+            return searchDate;
+        }
+
+        public Date getDate() {
+            return date;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        CompetitionSearch(boolean searchDate, Date date, String name) {
+            this.searchDate = searchDate;
+            this.date = date;
+            this.name = name;
         }
     }
 }

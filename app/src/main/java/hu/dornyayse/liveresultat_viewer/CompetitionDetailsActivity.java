@@ -1,10 +1,12 @@
 package hu.dornyayse.liveresultat_viewer;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceManager;
 
 import hu.dornyayse.liveresultat_viewer.model.Competition;
 import hu.dornyayse.liveresultat_viewer.network.ApiManager;
@@ -24,7 +26,15 @@ public class CompetitionDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_competition_details);
+        SharedPreferences pref = PreferenceManager
+                .getDefaultSharedPreferences(this);
+
+        boolean darkMode = pref.getBoolean("dark_mode", false);
+        if (darkMode) {
+            setTheme(R.style.DarkTheme);
+        } else {
+            setTheme(R.style.LightTheme);
+        }
 
         Long competitionId = getIntent().getLongExtra("competition", 0);
         competition = dataHolder.getCompetition(competitionId);

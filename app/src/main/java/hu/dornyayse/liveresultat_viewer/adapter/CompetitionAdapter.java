@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hu.dornyayse.liveresultat_viewer.CompetitionDetailsActivity;
-import hu.dornyayse.liveresultat_viewer.CompetitionListActivity;
 import hu.dornyayse.liveresultat_viewer.R;
 import hu.dornyayse.liveresultat_viewer.model.Competition;
 import hu.dornyayse.liveresultat_viewer.service.DataHolder;
@@ -43,7 +41,7 @@ public class CompetitionAdapter
         if (position < todayCompetitions.size()) {
             competition = todayCompetitions.get(position);
             holder.itemView.setBackgroundColor(
-                    holder.itemView.getResources().getColor(R.color.colorLiveToday)
+                    holder.itemView.getResources().getColor(R.color.colorLiveTodayLight)
             );
             holder.setWhiteText();
             holder.dateTextView.setText(R.string.live_today);
@@ -87,7 +85,7 @@ public class CompetitionAdapter
 
     @Override
     public int getItemCount() {
-        return competitions.size() + todayCompetitions.size() + 2;
+        return competitions.size() + todayCompetitions.size();
     }
 
     class CompetitionViewHolder extends RecyclerView.ViewHolder {

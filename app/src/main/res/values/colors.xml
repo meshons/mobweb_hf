@@ -3,7 +3,7 @@
     <color name="colorPrimary">#226318</color>
     <color name="gray">#eeeeee</color>
     <color name="colorPrimaryDark">#226318</color>
-    <color name="colorLiveToday">#5c0000</color>
+    <color name="colorLiveTodayLight">#5c0000</color>
     <color name="colorAccent">#D81B60</color>
     <color name="black">#282828</color>
 </resources>

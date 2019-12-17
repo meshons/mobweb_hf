@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="appBarOverlay" format="reference" />
+    <attr name="popUpOverlay" format="reference" />
+    <attr name="colorLiveToday" format="color" />
+</resources>
