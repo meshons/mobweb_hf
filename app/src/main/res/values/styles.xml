@@ -12,16 +12,24 @@
         <item name="appBarOverlay">@style/LightTheme.AppBarOverlay</item>
         <item name="popUpOverlay">@style/LightTheme.PopupOverlay</item>
         <item name="colorLiveToday">@color/colorLiveTodayLight</item>
+        <item name="colorBackground">@color/gray</item>
+        <item name="colorText">@color/black</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorPrimary">@color/black</item>
     </style>
 
     <style name="DarkTheme" parent="AppTheme">
         <item name="colorPrimary">@color/black</item>
         <item name="colorPrimaryDark">@color/black</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/gray</item>
 
         <item name="appBarOverlay">@style/DarkTheme.AppBarOverlay</item>
         <item name="popUpOverlay">@style/DarkTheme.PopupOverlay</item>
         <item name="colorLiveToday">@color/colorLiveTodayLight</item>
+        <item name="colorBackground">@color/black</item>
+        <item name="colorText">@color/gray</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textColorPrimary">@color/gray</item>
     </style>
 
     <style name="LightTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

@@ -36,6 +36,8 @@ public class CompetitionDetailsActivity extends AppCompatActivity {
             setTheme(R.style.LightTheme);
         }
 
+        setContentView(R.layout.activity_competition_details);
+
         Long competitionId = getIntent().getLongExtra("competition", 0);
         competition = dataHolder.getCompetition(competitionId);
 

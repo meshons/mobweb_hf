@@ -112,7 +112,7 @@ public class CompetitionListActivity extends AppCompatActivity implements
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
 
         RecyclerView competitionListView = findViewById(R.id.competition_list);
-        competitionAdapter = new CompetitionAdapter();
+        competitionAdapter = new CompetitionAdapter(getApplicationContext());
         competitionListView.setLayoutManager(new LinearLayoutManager(this));
         competitionListView.setAdapter(competitionAdapter);
 

@@ -1,12 +1,15 @@
 package hu.dornyayse.liveresultat_viewer.adapter;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DateFormat;
@@ -26,6 +29,15 @@ public class CompetitionAdapter
     private final List<Competition> competitions = new ArrayList<>();
     private final List<Competition> todayCompetitions = new ArrayList<>();
 
+    private boolean darkMode;
+
+    public CompetitionAdapter(Context context) {
+        SharedPreferences pref = PreferenceManager
+                .getDefaultSharedPreferences(context);
+
+        darkMode = pref.getBoolean("dark_mode", false);
+    }
+
     @NonNull
     @Override
     public CompetitionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -38,6 +50,7 @@ public class CompetitionAdapter
     @Override
     public void onBindViewHolder(@NonNull CompetitionViewHolder holder, int position) {
         Competition competition;
+
         if (position < todayCompetitions.size()) {
             competition = todayCompetitions.get(position);
             holder.itemView.setBackgroundColor(
@@ -51,9 +64,12 @@ public class CompetitionAdapter
                     DateFormat.getDateInstance(DateFormat.SHORT).format(competition.getDate())
             );
             holder.itemView.setBackgroundColor(
-                    holder.itemView.getResources().getColor(R.color.gray)
+                    holder.itemView.getResources().getColor(darkMode ? R.color.black : R.color.gray)
             );
-            holder.setBlackText();
+            if (darkMode)
+                holder.setWhiteText();
+            else
+                holder.setBlackText();
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

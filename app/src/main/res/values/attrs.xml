@@ -3,4 +3,6 @@
     <attr name="appBarOverlay" format="reference" />
     <attr name="popUpOverlay" format="reference" />
     <attr name="colorLiveToday" format="color" />
+    <attr name="colorBackground" format="color" />
+    <attr name="colorText" format="color" />
 </resources>
