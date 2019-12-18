@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dip"
-    android:background="?attr/colorBackground">
+    android:padding="24dip">
 
     <Switch
         android:id="@+id/search_switch"
@@ -39,7 +38,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:focusable="true"
-        android:inputType="none" />
+        android:focusable="true" />
 
 </LinearLayout>

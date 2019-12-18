@@ -1,11 +1,13 @@
 package hu.dornyayse.liveresultat_viewer;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -22,6 +24,17 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences pref = PreferenceManager
+                .getDefaultSharedPreferences(this);
+
+        boolean darkMode = pref.getBoolean("dark_mode", false);
+        if (darkMode) {
+            setTheme(R.style.DarkTheme_Splash);
+        } else {
+            setTheme(R.style.LightTheme_Splash);
+        }
+
         setContentView(R.layout.activity_splash);
 
         loaderTextView = findViewById(R.id.loading);

@@ -28,6 +28,7 @@
 
         <SwitchPreferenceCompat
             app:key="dark_mode"
+            app:summary="@string/after_restart"
             app:title="@string/dark_mode" />
 
     </PreferenceCategory>

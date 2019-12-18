@@ -36,4 +36,5 @@
     <string name="search_for_name">Search for name / date</string>
     <string name="name">Name</string>
     <string name="date">date</string>
+    <string name="after_restart">Only works after restart of application</string>
 </resources>

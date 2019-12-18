@@ -2,6 +2,7 @@ package hu.dornyayse.liveresultat_viewer.fragment;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.Switch;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.preference.PreferenceManager;
@@ -23,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import hu.dornyayse.liveresultat_viewer.R;
 
@@ -42,9 +45,28 @@ public class SearchCompetitionDialogFragment extends DialogFragment {
 
     private final Calendar myCalendar = Calendar.getInstance();
 
+    private Context context;
+    private int style;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        context = Objects.requireNonNull(getContext());
+
+        SharedPreferences pref = PreferenceManager
+                .getDefaultSharedPreferences(Objects.requireNonNull(getContext()));
+
+        boolean darkMode = pref.getBoolean("dark_mode", false);
+        ContextThemeWrapper newContext;
+        if (darkMode) {
+            newContext = new ContextThemeWrapper(context, R.style.DarkTheme_Dialog);
+            style = R.style.DarkTheme_Dialog;
+        } else {
+            newContext = new ContextThemeWrapper(context, R.style.LightTheme_Dialog);
+            style = R.style.LightTheme_Dialog;
+        }
+
         FragmentActivity activity = getActivity();
 
         if (activity instanceof SearchCompetitionDialogListener) {
@@ -58,7 +80,7 @@ public class SearchCompetitionDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new AlertDialog.Builder(requireContext())
+        return new AlertDialog.Builder(context, style)
                 .setTitle(R.string.search)
                 .setView(getContentView())
                 .setPositiveButton(R.string.search, new DialogInterface.OnClickListener() {
@@ -77,8 +99,9 @@ public class SearchCompetitionDialogFragment extends DialogFragment {
                 .create();
     }
 
+
     private View getContentView() {
-        View contentView = LayoutInflater.from(getContext())
+        View contentView = LayoutInflater.from(context)
                 .inflate(R.layout.dialog_search_competition, null);
         name = contentView.findViewById(R.id.name);
         date = contentView.findViewById(R.id.date);
@@ -115,7 +138,7 @@ public class SearchCompetitionDialogFragment extends DialogFragment {
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(getContext(), datePicker, myCalendar
+                new DatePickerDialog(context, datePicker, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
